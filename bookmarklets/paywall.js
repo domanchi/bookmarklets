@@ -6,7 +6,7 @@
  */
 (function() {
     document.cookie.split("; ").forEach((cookie) => {
-        //  Cookies are uniquely identified by their name, domain and path.
+        //  Cookies are uniquely identified by their name, domain and path. (https://stackoverflow.com/a/2421786)
         //  Since we can't tell the domain and path of these values, we're just going to remove
         //  cookies for **all** combinations.
         const cookieBase = `${cookie.split("=")[0]}=; expires=Thu, 01-Jan-1970 00:00:01 GMT;`;
