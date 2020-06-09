@@ -20,7 +20,18 @@ Feel free to fork as necessary!
 Use https://mrcoles.com/bookmarklet/ to encode the following snippet:
 
 ```javascript
-fetch("https://raw.githubusercontent.com/domanchi/bookmarklets/master/bookmarklets/paywall.js")
+function generateNonce(length=10) {
+    let text = "";
+    const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    for (let i=0; i < length; i++) {
+        text += alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+    }
+
+    return text;
+}
+
+const script = "https://raw.githubusercontent.com/domanchi/bookmarklets/master/bookmarklets/paywall.js";
+fetch(`${script}?nonce=${generateNonce()}`)
     .then((response) => { return response.text(); })
     .then((body) => {eval(body);})
 ```
