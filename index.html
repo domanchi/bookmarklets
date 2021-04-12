@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+  <div id="button-container"></div>
+
+  <script>
+    (async function buttonGenerator() {
+      const response = await fetch("/bookmarklets");
+      const content = await response.text();
+      const filenames = [...content.matchAll(/href="([^"]+)"/g)];
+
+      const parent = document.querySelector("#button-container");
+      for (const match of filenames) {
+        const filename = match[1];
+
+        const element = document.createElement("button");
+        element.innerHTML = filename;
+        element.onclick = function () {
+          runBookmarklet(filename.slice(0, -3));
+        }
+
+        const divWrapper = document.createElement("div");
+        divWrapper.appendChild(element);
+
+        parent.appendChild(divWrapper);
+      }
+    })();
+  </script>
+
+  <script>
+    function generateNonce(length=10) {
+      return Math.random().toString(36).substr(2, 2 + 10);
+    }
+
+    async function runBookmarklet(filename) {
+      //  Use nonce to avoid caching.
+      const response = await fetch(`/bookmarklets/${filename}.js?nonce=${generateNonce()}`);
+      const content = await response.text();
+      eval(content);
+    }
+  </script>
+</body>
+</html>
