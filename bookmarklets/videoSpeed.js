@@ -13,7 +13,19 @@
         return;
     }
 
-    document.getElementsByTagName("video").forEach((video) => {
-        video.playbackRate = speed;
-    });
+    const candidates = [
+        document,
+
+        //  NOTE: Sometimes, the video is nested in an iframe.
+        ...[...document.getElementsByTagName("iframe")].map(
+            (item) => item.contentDocument
+        ),
+    ];
+
+    for (const candidate of candidates) {
+        const videos = [...candidate.getElementsByTagName("video")];
+        if (videos.length) {
+            videos.forEach((video) => {video.playbackRate = speed;})
+        }
+    }
 })();
