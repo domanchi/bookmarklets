@@ -23,6 +23,10 @@
     ];
 
     for (const candidate of candidates) {
+        if (!candidate) {
+            continue;
+        }
+
         const videos = [...candidate.getElementsByTagName("video")];
         if (videos.length) {
             videos.forEach((video) => {video.playbackRate = speed;})
